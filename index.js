@@ -2,6 +2,8 @@
 const fs = require('fs');
 const dotenv = require('dotenv');
 
+let allEnvs = null;
+
 const loadAllEnvs = () => {
   const envs = {};
   const envFiles = fs.readdirSync(process.cwd()).filter(file => file.startsWith('.env') && !file.endsWith('.local') && file !== '.env');
@@ -14,8 +16,13 @@ const loadAllEnvs = () => {
   return envs;
 };
 
-const injectVars = (appName, allEnvs) => {
+const injectVars = (appName) => {
   const injectedVars = {};
+
+  if (!allEnvs) {
+    allEnvs = loadAllEnvs();
+  }
+
   for (const environment of Object.keys(allEnvs)) {
     const prefixedVars = {};
     for (const [key, value] of Object.entries(allEnvs[environment])) {
@@ -30,7 +37,6 @@ const injectVars = (appName, allEnvs) => {
 };
 
 module.exports = {
-  loadAllEnvs,
   injectVars
 };
 
