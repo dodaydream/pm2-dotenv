@@ -16,7 +16,7 @@ const PM2DotEnv = () => {
 
   const _loadAllEnvs = () => {
     const envs = {};
-    const envFiles = fs.readdirSync(process.cwd()).filter(file => file.startsWith('.env') && !file.endsWith('.local') && file !== '.env');
+    const envFiles = fs.readdirSync(process.cwd()).filter(file => file.startsWith('.env') && !file.endsWith('.local'));
 
     for (const envFile of envFiles) {
       const environment = envFile.replace('.env.', '');
