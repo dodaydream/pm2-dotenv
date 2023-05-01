@@ -2,15 +2,13 @@
 const fs = require('fs');
 const { loadAllEnvs } = require('../index');
 
-describe('pm2-dotenv', () => {
+describe('loadAllEnvs', () => {
   const originalCwd = process.cwd();
 
   beforeEach(() => {
     // Create temporary directory for test files
     const tmpPath = fs.mkdtempSync('test-');
     process.chdir(tmpPath);
-
-    console.log('CWD', process.cwd())
 
     // Create temporary .env.<environment> files
     fs.writeFileSync('.env.test1', 'APP1_KEY1=value1\nAPP1_KEY2=value2');
@@ -23,7 +21,7 @@ describe('pm2-dotenv', () => {
     process.chdir(originalCwd);
   });
 
-  test('loadAllEnvs loads environment variables from .env.<environment> files', () => {
+  test('loads environment variables from .env.<environment> files', () => {
     const envs = loadAllEnvs();
 
     expect(envs).toEqual({
@@ -38,7 +36,7 @@ describe('pm2-dotenv', () => {
     });
   });
 
-  test('loadAllEnvs ignores non-env files', () => {
+  test('ignores non-env files', () => {
     fs.writeFileSync('non-env-file', 'APP1_KEY5=value5\nAPP1_KEY6=value6');
 
     const envs = loadAllEnvs();
