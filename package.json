@@ -1,0 +1,25 @@
+{
+  "name": "pm2-dotenv",
+  "version": "1.0.0",
+  "description": "A package to load environment variables from .env files for PM2 ecosystem.config.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "pm2",
+    "dotenv",
+    "environment",
+    "variables",
+    "ecosystem.config.js"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "jest": "^27.4.5"
+  }
+}
+
