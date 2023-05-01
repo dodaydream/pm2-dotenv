@@ -2,41 +2,59 @@
 const fs = require('fs');
 const dotenv = require('dotenv');
 
-let allEnvs = null;
 
-const loadAllEnvs = () => {
-  const envs = {};
-  const envFiles = fs.readdirSync(process.cwd()).filter(file => file.startsWith('.env') && !file.endsWith('.local') && file !== '.env');
+const PM2DotEnv = () => {
+  let allEnvs = null;
 
-  for (const envFile of envFiles) {
-    const environment = envFile.replace('.env.', '');
-    envs[environment] = dotenv.config({ path: envFile }).parsed;
-  }
+  const _setEnvs = (envs) => {
+    allEnvs = envs;
+  };
 
-  return envs;
-};
+  const _getEnvs = () => {
+    return allEnvs;
+  };
 
-const injectVars = (appName) => {
-  const injectedVars = {};
+  const _loadAllEnvs = () => {
+    const envs = {};
+    const envFiles = fs.readdirSync(process.cwd()).filter(file => file.startsWith('.env') && !file.endsWith('.local') && file !== '.env');
 
-  if (!allEnvs) {
-    allEnvs = loadAllEnvs();
-  }
-
-  for (const environment of Object.keys(allEnvs)) {
-    const prefixedVars = {};
-    for (const [key, value] of Object.entries(allEnvs[environment])) {
-      if (key.startsWith(`${appName.toUpperCase()}_`)) {
-        const newKey = key.replace(`${appName.toUpperCase()}_`, '');
-        prefixedVars[newKey] = value;
-      }
+    for (const envFile of envFiles) {
+      const environment = envFile.replace('.env.', '');
+      envs[environment] = dotenv.config({ path: envFile }).parsed;
     }
-    injectedVars[`env_${environment}`] = prefixedVars;
+
+    _setEnvs(envs);
+  };
+
+  const injectEnvs = (appName) => {
+    const injectedEnvs = {};
+
+    if (allEnvs === null) {
+      _loadAllEnvs();
+    }
+
+    for (const environment of Object.keys(allEnvs)) {
+      const prefixedEnvs = {};
+      for (const [key, value] of Object.entries(allEnvs[environment])) {
+        if (key.startsWith(`${appName.toUpperCase()}_`)) {
+          const newKey = key.replace(`${appName.toUpperCase()}_`, '');
+          prefixedEnvs[newKey] = value;
+        }
+      }
+      injectedEnvs[`env_${environment}`] = prefixedEnvs;
+    }
+
+    return injectedEnvs;
+  };
+
+  return {
+    injectEnvs,
+    _loadAllEnvs,
+    _getEnvs,
+    _setEnvs,
   }
-  return injectedVars;
-};
+}
 
-module.exports = {
-  injectVars
-};
+const __PM2DotEnv__ = PM2DotEnv();
 
+module.exports = __PM2DotEnv__

@@ -1,10 +1,10 @@
 // __tests__/pm2-dotenv.test.js
 const fs = require('fs');
-const { loadAllEnvs, injectVars } = require('../index');
+const { injectEnvs, _setEnvs } = require('../index');
 
 // ...existing tests...
 
-describe('injectVars', () => {
+describe('injectEnvs', () => {
   const allEnvs = {
     test1: {
       APP1_HOST: 'localhost',
@@ -18,8 +18,18 @@ describe('injectVars', () => {
     },
   };
 
-  test('injectVars injects environment variables with the correct prefix', () => {
-    const injectedVarsForApp1 = injectVars('app1', allEnvs);
+  // mock the _getEnv function to change the return value
+
+  beforeEach(() => {
+    _setEnvs(allEnvs);
+  });
+
+  afterEach(() => {
+    jest.resetModules();
+  })
+
+  test('injectEnvs injects environment variables with the correct prefix', () => {
+    const injectedVarsForApp1 = injectEnvs('app1');
 
     expect(injectedVarsForApp1).toEqual({
       env_test1: {
@@ -33,8 +43,8 @@ describe('injectVars', () => {
     });
   });
 
-  test('injectVars ignores environment variables with different prefixes', () => {
-    const injectedVarsForApp2 = injectVars('app2', allEnvs);
+  test('injectEnvs ignores environment variables with different prefixes', () => {
+    const injectedVarsForApp2 = injectEnvs('app2');
 
     expect(injectedVarsForApp2).toEqual({
       env_test1: {
@@ -46,8 +56,8 @@ describe('injectVars', () => {
     });
   });
 
-  test('injectVars returns an empty object for non-existent app prefixes', () => {
-    const injectedVarsForApp3 = injectVars('app3', allEnvs);
+  test('injectEnvs returns an empty object for non-existent app prefixes', () => {
+    const injectedVarsForApp3 = injectEnvs('app3', allEnvs);
 
     expect(injectedVarsForApp3).toEqual({
       env_test1: {},

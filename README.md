@@ -21,22 +21,22 @@ APP1_NAME=app # this will be load to the app1 and the name will be NAME
 APP2_NAME=worker # this will be load to the app2 and the name will be NAME
 ```
 
-Use the `injectVars()` function to inject environment variables
+Use the `injectEnvs()` function to inject environment variables
 
 ```
-const injectVars = require('pm2-dotenv').injectVars;
+const { injectEnvs } = require('pm2-dotenv')
 
 module.exports = {
   apps: [
     {
       name: 'app',
       script: 'app.js',
-      ...injectVars('app'),
+      ...injectEnvs('app'),
     },
     {
       name: 'worker',
       script: 'worker.js',
-      ...injectVars('worker'),
+      ...injectEnvs('worker'),
     }
   ],
 };

@@ -1,8 +1,8 @@
 // __tests__/pm2-dotenv.test.js
 const fs = require('fs');
-const { loadAllEnvs } = require('../index');
+const { _loadAllEnvs, _getEnvs } = require('../index');
 
-describe('loadAllEnvs', () => {
+describe('_loadAllEnvs', () => {
   const originalCwd = process.cwd();
 
   beforeEach(() => {
@@ -19,10 +19,12 @@ describe('loadAllEnvs', () => {
     // Clean up temporary files and revert to original working directory
     fs.rmSync(process.cwd(), { recursive: true, force: true });
     process.chdir(originalCwd);
+    jest.resetModules();
   });
 
   test('loads environment variables from .env.<environment> files', () => {
-    const envs = loadAllEnvs();
+    _loadAllEnvs();
+    const envs = _getEnvs();
 
     expect(envs).toEqual({
       test1: {
@@ -39,7 +41,9 @@ describe('loadAllEnvs', () => {
   test('ignores non-env files', () => {
     fs.writeFileSync('non-env-file', 'APP1_KEY5=value5\nAPP1_KEY6=value6');
 
-    const envs = loadAllEnvs();
+    _loadAllEnvs();
+    const envs = _getEnvs();
+
     expect(Object.keys(envs)).not.toContain('non-env-file');
   });
 });
