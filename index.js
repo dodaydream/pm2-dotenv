@@ -16,10 +16,12 @@ const PM2DotEnv = () => {
 
   const _loadAllEnvs = () => {
     const envs = {};
+
     const envFiles = fs.readdirSync(process.cwd()).filter(file => file.startsWith('.env') && !file.endsWith('.local'));
 
     for (const envFile of envFiles) {
-      const environment = envFile.replace('.env.', '');
+      const environment = (envFile === '.env' ? 'env' : envFile.replace('.env.', ''));
+
       envs[environment] = dotenv.config({ path: envFile }).parsed;
     }
 

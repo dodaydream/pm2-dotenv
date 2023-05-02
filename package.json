@@ -1,6 +1,6 @@
 {
   "name": "pm2-dotenv",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "A package to load environment variables from .env files for PM2 ecosystem.config.js",
   "main": "index.js",
   "scripts": {
