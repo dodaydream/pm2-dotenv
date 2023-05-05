@@ -20,7 +20,7 @@ const PM2DotEnv = () => {
     const envFiles = fs.readdirSync(process.cwd()).filter(file => file.startsWith('.env') && !file.endsWith('.local'));
 
     for (const envFile of envFiles) {
-      const environment = (envFile === '.env' ? 'env' : envFile.replace('.env.', ''));
+      const environment = (envFile === '.env' ? 'default' : envFile.replace('.env.', ''));
 
       envs[environment] = dotenv.config({ path: envFile }).parsed;
     }
@@ -43,7 +43,7 @@ const PM2DotEnv = () => {
           prefixedEnvs[newKey] = value;
         }
       }
-      injectedEnvs[`env_${environment}`] = prefixedEnvs;
+      injectedEnvs[environment === 'default' ? 'env' : `env_${environment}`] = prefixedEnvs;
     }
 
     return injectedEnvs;

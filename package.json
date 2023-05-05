@@ -1,10 +1,14 @@
 {
   "name": "pm2-dotenv",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A package to load environment variables from .env files for PM2 ecosystem.config.js",
   "main": "index.js",
   "scripts": {
     "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dodaydream/pm2-dotenv.git"
   },
   "keywords": [
     "pm2",
